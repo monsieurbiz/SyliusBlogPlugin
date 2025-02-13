@@ -46,7 +46,7 @@ return [
 ];
 ```
 
-Add the plugin's routing by creating a new file in `config/routes/monsieurbiz_sylius_blog_plugin.yaml` with the following content:
+Add the plugin's routing by creating a new file in `config/packages/monsieurbiz_sylius_blog_plugin.yaml` with the following content:
 
 ```yaml
 imports:
