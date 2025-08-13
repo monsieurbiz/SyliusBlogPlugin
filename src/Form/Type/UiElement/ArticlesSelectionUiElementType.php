@@ -60,6 +60,15 @@ class ArticlesSelectionUiElementType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'delete_empty' => true,
+                'button_add_options' => [
+                    'label' => 'sylius.ui.add',
+                ],
+                'button_delete_options' => [
+                    'label' => 'sylius.ui.delete',
+                    'attr' => [
+                        'class' => 'btn-outline-danger',
+                    ],
+                ],
                 'attr' => [
                     'class' => 'row row-cols-1 row-cols-sm-2',
                 ],
