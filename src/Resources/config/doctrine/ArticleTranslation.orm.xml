@@ -15,10 +15,10 @@
         <field name="description" type="text" />
         <field name="content" type="text"/>
 
-        <field name="metaTitle" nullable="true"/>
-        <field name="metaDescription" type="text" nullable="true"/>
-        <field name="metaKeywords" nullable="true"/>
-        <field name="metaImage" nullable="true" />
+        <field name="metaTitle" column="meta_title" nullable="true"/>
+        <field name="metaDescription" column="meta_description" type="text" nullable="true"/>
+        <field name="metaKeywords" column="meta_keywords" nullable="true"/>
+        <field name="metaImage" column="meta_image" nullable="true" />
 
         <field name="createdAt" column="created_at" type="datetime_immutable">
             <gedmo:timestampable on="create"/>
