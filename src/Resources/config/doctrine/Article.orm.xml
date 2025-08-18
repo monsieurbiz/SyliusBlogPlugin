@@ -20,13 +20,13 @@
 
         <field name="video" nullable="true" />
 
-        <field name="thumbnailImage" nullable="true" />
+        <field name="thumbnailImage" column="thumbnail_image" nullable="true" />
 
         <field name="type" />
         
         <field name="state" />
 
-        <field name="publishedAt" type="datetime" nullable="true" />
+        <field name="publishedAt" column="published_at" type="datetime" nullable="true" />
 
         <field name="createdAt" column="created_at" type="datetime_immutable">
             <gedmo:timestampable on="create"/>
