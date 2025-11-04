@@ -102,7 +102,7 @@ monsieurbiz_blog:
 
 monsieurbiz_menu:
     provider:
-       blog_list: Blog-Artikel-Liste
-       case_study_list: Fallstudien-Liste
-       blog: Blog-Artikel
-       case_study: Fallstudie
+        blog_list: Blog-Artikel-Liste
+        case_study_list: Fallstudien-Liste
+        blog: Blog-Artikel
+        case_study: Fallstudie
