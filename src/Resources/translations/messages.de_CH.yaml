@@ -1,0 +1,108 @@
+monsieurbiz_blog:
+    form:
+        tag:
+            title: Titel
+            slug: Slug
+        article:
+            tags: Schlagwörter
+            title: Titel
+            slug: Slug
+            content: Inhalt
+            image: Bild
+            video: Video
+            thumbnail_image: Vorschaubild
+            thumbnail_image_help: Wird in Listen verwendet, wenn vorhanden.
+            description: Beschreibung
+            authors: Autoren
+            meta_title: Meta-Titel
+            meta_description: Meta-Beschreibung
+            meta_keywords: Meta-Schlüsselwörter
+            meta_image: Meta-Bild
+            help:
+                description: Wird in der Listenansicht verwendet.
+                meta_title: Wenn leer, wird der Titel verwendet.
+                meta_description: Wenn leer, wird die Beschreibung verwendet.
+                meta_image: "Empfohlenes Format: 1200 x 630 px"
+        author:
+            name: Name
+            image: Bild
+    ui:
+        menu_blog: Blog
+        tag: Schlagwort
+        tags: Schlagwörter
+        new_tag: Neues Schlagwort
+        edit_tag: Schlagwort bearbeiten
+        manage_your_blog_tags: Blog-Schlagwörter verwalten
+        article: Artikel
+        articles: Artikel
+        case_study: Fallstudie
+        case_studies: Fallstudien
+        new_article: Neuer Artikel
+        edit_article: Artikel bearbeiten
+        title: Titel
+        published_at: Veröffentlicht am
+        publish: Veröffentlichen
+        draft: Entwurf
+        published: Veröffentlicht
+        see_more_articles: Weitere Artikel anzeigen
+        author: Autor
+        authors: Autoren
+        new_author: Neuer Autor
+        edit_author: Autor bearbeiten
+        name: Name
+        blog: Blog
+        read_more: Weiterlesen
+        new_case_study: Neue Fallstudie
+        edit_case_study: Fallstudie bearbeiten
+        no_results_to_display: Keine Ergebnisse vorhanden
+        show_in: "Anzeigen in"
+        show_article_in_shop: "Artikel im Shop anzeigen"
+        cannot_show_article_in_shop: "Dieser Artikel kann nicht im Shop angezeigt werden, da er nicht aktiviert, nicht veröffentlicht oder keinem Kanal zugeordnet ist."
+        preview_update_action_tooltip: "Klicken Sie auf „Aktualisieren“, um Ihre Änderungen zu speichern, bevor Sie den Artikel in der Vorschau anzeigen."
+        preview_create_action_tooltip: "Klicken Sie auf „Erstellen“, um Ihre Änderungen zu speichern, bevor Sie den Artikel in der Vorschau anzeigen."
+        actions:
+            preview: 'Vorschau'
+        banner:
+            preview: Vorschau
+    ui_element:
+        articles_selection_ui_element:
+            title: Artikelauswahl
+            description: Zeigt eine Liste manuell ausgewählter Artikel an.
+            fields:
+                title: Titel
+                articles: Artikel
+                button_label: Schaltflächenbeschriftung
+                button_url: Schaltflächen-URL
+                article: Artikel
+                position: Position
+        articles_by_tags_ui_element:
+            title: Artikel nach Schlagwörtern
+            description: Zeigt eine Liste von Artikeln nach Schlagwörtern an.
+            fields:
+                title: Titel
+                tags: Schlagwörter
+                type_filter: Typfilter
+                limit: Begrenzung
+                button_label: Schaltflächenbeschriftung
+                button_url: Schaltflächen-URL
+            help:
+                limit: Die maximale Anzahl der anzuzeigenden Artikel.
+            choices:
+                type_filter:
+                    all: Alle
+                    blog: Blog-Artikel
+                    case_study: Fallstudie
+    articles:
+        display:
+            label: Anzeige
+            choices:
+                multiple_with_image: Mehrere mit Bild
+                multiple_without_image: Mehrere ohne Bild
+                single: Einzelner Artikel
+
+monsieurbiz_menu:
+    provider:
+        blog_list: Blog-Artikel-Liste
+        case_study_list: Fallstudien-Liste
+        blog: Blog-Artikel
+        case_study: Fallstudie
