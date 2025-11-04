@@ -27,7 +27,7 @@ class CaseStudyListUrlProvider extends AbstractUrlProvider
 
     protected string $code = self::PROVIDER_CODE;
 
-    protected string $icon = 'crosshairs';
+    protected string $icon = 'tabler:briefcase';
 
     protected int $priority = 30;
 

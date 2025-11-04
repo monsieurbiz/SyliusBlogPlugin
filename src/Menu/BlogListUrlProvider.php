@@ -27,7 +27,7 @@ class BlogListUrlProvider extends AbstractUrlProvider
 
     protected string $code = self::PROVIDER_CODE;
 
-    protected string $icon = 'newspaper';
+    protected string $icon = 'tabler:news';
 
     protected int $priority = 35;
 
