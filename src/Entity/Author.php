@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusBlogPlugin\Entity;
 
-class Author implements AuthorInterface
+use Stringable;
+
+class Author implements Stringable, AuthorInterface
 {
     private ?int $id = null;
 
