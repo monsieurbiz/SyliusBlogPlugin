@@ -19,52 +19,58 @@ use MonsieurBiz\SyliusMenuPlugin\Provider\AbstractUrlProvider;
 use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 
-class CaseStudyUrlProvider extends AbstractUrlProvider
-{
-    public const PROVIDER_CODE = 'case_study';
-
-    protected string $code = self::PROVIDER_CODE;
-
-    protected string $icon = 'tabler:file-analytics';
-
-    protected int $priority = 20;
-
-    public function __construct(
-        RouterInterface $router,
-        private ArticleRepositoryInterface $articleRepository,
-    ) {
-        parent::__construct($router);
-    }
-
-    protected function getResults(string $locale, string $search = ''): iterable
+if (class_exists(AbstractUrlProvider::class)) {
+    class CaseStudyUrlProvider extends AbstractUrlProvider
     {
-        $queryBuilder = $this->articleRepository->createListQueryBuilderByType($locale, ArticleInterface::CASE_STUDY_TYPE)
-            ->andWhere('ba.enabled = true')
-            ->andWhere('ba.state = :state')
-            ->setParameter('state', ArticleInterface::STATE_PUBLISHED)
-        ;
+        public const PROVIDER_CODE = 'case_study';
 
-        if (!empty($search)) {
-            $queryBuilder
-                ->andWhere('translation.title LIKE :search OR translation.slug LIKE :search')
-                ->setParameter('search', '%' . $search . '%')
-            ;
+        protected string $code = self::PROVIDER_CODE;
+
+        protected string $icon = 'tabler:file-analytics';
+
+        protected int $priority = 20;
+
+        public function __construct(
+            RouterInterface $router,
+            private ArticleRepositoryInterface $articleRepository,
+        ) {
+            parent::__construct($router);
         }
 
-        $queryBuilder->setMaxResults($this->getMaxResults());
+        protected function getResults(string $locale, string $search = ''): iterable
+        {
+            $queryBuilder = $this->articleRepository->createListQueryBuilderByType($locale, ArticleInterface::CASE_STUDY_TYPE)
+                ->andWhere('ba.enabled = true')
+                ->andWhere('ba.state = :state')
+                ->setParameter('state', ArticleInterface::STATE_PUBLISHED)
+            ;
 
-        /** @phpstan-ignore-next-line */
-        return $queryBuilder->getQuery()->getResult();
+            if (!empty($search)) {
+                $queryBuilder
+                    ->andWhere('translation.title LIKE :search OR translation.slug LIKE :search')
+                    ->setParameter('search', '%' . $search . '%')
+                ;
+            }
+
+            $queryBuilder->setMaxResults($this->getMaxResults());
+
+            /** @phpstan-ignore-next-line */
+            return $queryBuilder->getQuery()->getResult();
+        }
+
+        protected function addItemFromResult(object $result, string $locale): void
+        {
+            Assert::isInstanceOf($result, ArticleInterface::class);
+            /** @var ArticleInterface $result */
+            $result->setCurrentLocale($locale);
+            $this->addItem(
+                (string) $result->getTitle(),
+                $this->router->generate('monsieurbiz_case_study_article_show', ['slug' => $result->getSlug(), '_locale' => $locale])
+            );
+        }
     }
-
-    protected function addItemFromResult(object $result, string $locale): void
+} else {
+    class CaseStudyUrlProvider
     {
-        Assert::isInstanceOf($result, ArticleInterface::class);
-        /** @var ArticleInterface $result */
-        $result->setCurrentLocale($locale);
-        $this->addItem(
-            (string) $result->getTitle(),
-            $this->router->generate('monsieurbiz_case_study_article_show', ['slug' => $result->getSlug(), '_locale' => $locale])
-        );
     }
 }

@@ -17,13 +17,10 @@ use Closure;
 use Faker\Factory;
 use Faker\Generator;
 use MonsieurBiz\SyliusBlogPlugin\Entity\AuthorInterface;
-use MonsieurBiz\SyliusMediaManagerPlugin\Exception\FileNotFoundException;
-use MonsieurBiz\SyliusMediaManagerPlugin\Operator\DirectoryOperatorInterface;
-use MonsieurBiz\SyliusMediaManagerPlugin\Repository\FileRepositoryInterface;
+use RuntimeException;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -36,8 +33,6 @@ final class AuthorFixtureFactory extends AbstractExampleFactory
     public function __construct(
         private FactoryInterface $authorFactory,
         private FileLocatorInterface $fileLocator,
-        private FileRepositoryInterface $fileRepository,
-        private DirectoryOperatorInterface $directoryOperator,
         private string $publicDir,
     ) {
         $this->faker = Factory::create();
@@ -93,6 +88,9 @@ final class AuthorFixtureFactory extends AbstractExampleFactory
         };
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function getImagePath(?string $imagePath): ?string
     {
         if (null === $imagePath) {
@@ -105,21 +103,32 @@ final class AuthorFixtureFactory extends AbstractExampleFactory
             return $existingImage;
         }
 
-        $file = new UploadedFile($sourcePath, basename($sourcePath));
+        $filename = basename($sourcePath);
         $absoluteFolder = $this->publicDir . '/media/gallery/images/author/';
-        $this->directoryOperator->addUploadedFile($absoluteFolder, $file);
 
-        return 'gallery/images/author/' . $file->getClientOriginalName();
+        if (!is_dir($absoluteFolder)) {
+            mkdir($absoluteFolder, 0777, true);
+        }
+
+        $destinationPath = $absoluteFolder . $filename;
+        if (!copy($sourcePath, $destinationPath)) {
+            throw new RuntimeException(\sprintf('Failed to copy file "%s" to "%s"', $sourcePath, $destinationPath));
+        }
+
+        return 'gallery/images/author/' . $filename;
     }
 
     private function findExistingImage(string $filename): ?string
     {
         $absoluteFolder = $this->publicDir . '/media/gallery/images/author/';
 
-        try {
-            return $this->fileRepository->findOneFromPath($absoluteFolder . $filename)->getPath();
-        } catch (FileNotFoundException) {
-            $this->directoryOperator->createDirectory($absoluteFolder); // Create the folder if it does not exist
+        if (!is_dir($absoluteFolder)) {
+            mkdir($absoluteFolder, 0777, true); // Create the folder if it does not exist
+        }
+
+        $filePath = $absoluteFolder . $filename;
+        if (file_exists($filePath)) {
+            return 'gallery/images/author/' . $filename;
         }
 
         return null;

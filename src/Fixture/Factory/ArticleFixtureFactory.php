@@ -21,9 +21,7 @@ use Faker\Generator;
 use MonsieurBiz\SyliusBlogPlugin\Entity\ArticleInterface;
 use MonsieurBiz\SyliusBlogPlugin\Entity\ArticleTranslationInterface;
 use MonsieurBiz\SyliusBlogPlugin\Repository\TagRepositoryInterface;
-use MonsieurBiz\SyliusMediaManagerPlugin\Exception\FileNotFoundException;
-use MonsieurBiz\SyliusMediaManagerPlugin\Operator\DirectoryOperatorInterface;
-use MonsieurBiz\SyliusMediaManagerPlugin\Repository\FileRepositoryInterface;
+use RuntimeException;
 use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
@@ -34,7 +32,6 @@ use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -58,8 +55,6 @@ final class ArticleFixtureFactory extends AbstractExampleFactory
         private ChannelRepositoryInterface $channelRepository,
         private RepositoryInterface $authorRepository,
         private FileLocatorInterface $fileLocator,
-        private FileRepositoryInterface $fileRepository,
-        private DirectoryOperatorInterface $directoryOperator,
         private string $defaultLocaleCode,
         private string $publicDir,
     ) {
@@ -267,6 +262,9 @@ final class ArticleFixtureFactory extends AbstractExampleFactory
         };
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function getFilePath(?string $imagePath, string $folder): ?string
     {
         if (null === $imagePath) {
@@ -279,21 +277,31 @@ final class ArticleFixtureFactory extends AbstractExampleFactory
             return $existingImage;
         }
 
-        $file = new UploadedFile($sourcePath, basename($sourcePath));
+        $filename = basename($sourcePath);
         $absoluteFolder = $this->publicDir . '/media/gallery/' . $folder . '/blog/';
-        $this->directoryOperator->addUploadedFile($absoluteFolder, $file);
 
-        return 'gallery/' . $folder . '/blog/' . $file->getClientOriginalName();
+        if (!is_dir($absoluteFolder)) {
+            mkdir($absoluteFolder, 0777, true);
+        }
+
+        $destinationPath = $absoluteFolder . $filename;
+        if (!copy($sourcePath, $destinationPath)) {
+            throw new RuntimeException(\sprintf('Failed to copy file "%s" to "%s"', $sourcePath, $destinationPath));
+        }
+
+        return 'gallery/' . $folder . '/blog/' . $filename;
     }
 
     private function findExistingFile(string $filename, string $folder): ?string
     {
         $absoluteFolder = $this->publicDir . '/media/gallery/' . $folder . '/blog/';
 
-        try {
-            return $this->fileRepository->findOneFromPath($absoluteFolder . $filename)->getPath();
-        } catch (FileNotFoundException) {
-            $this->directoryOperator->createDirectory($absoluteFolder); // Create the folder if it does not exist
+        if (!is_dir($absoluteFolder)) {
+            mkdir($absoluteFolder, 0777, true); // Create the folder if it does not exist
+        }
+        $filePath = $absoluteFolder . $filename;
+        if (file_exists($filePath)) {
+            return 'gallery/' . $folder . '/blog/' . $filename;
         }
 
         return null;
