@@ -19,7 +19,7 @@ use MonsieurBiz\SyliusBlogPlugin\Entity\ArticleInterface;
 use MonsieurBiz\SyliusBlogPlugin\Entity\TagInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
-final class TagRepository extends EntityRepository implements TagRepositoryInterface
+class TagRepository extends EntityRepository implements TagRepositoryInterface
 {
     public function findRootNodes(): array
     {

@@ -20,7 +20,7 @@ use MonsieurBiz\SyliusBlogPlugin\Entity\TagInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Channel\Model\ChannelInterface;
 
-final class ArticleRepository extends EntityRepository implements ArticleRepositoryInterface
+class ArticleRepository extends EntityRepository implements ArticleRepositoryInterface
 {
     public function createListQueryBuilderByType(string $localeCode, string $type): QueryBuilder
     {
