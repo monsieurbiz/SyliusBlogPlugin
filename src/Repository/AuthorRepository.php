@@ -16,7 +16,7 @@ namespace MonsieurBiz\SyliusBlogPlugin\Repository;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
-final class AuthorRepository extends EntityRepository implements AuthorRepositoryInterface
+class AuthorRepository extends EntityRepository implements AuthorRepositoryInterface
 {
     public function createListQueryBuilder(): QueryBuilder
     {
