@@ -24,7 +24,7 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class AuthorFixtureFactory extends AbstractExampleFactory
+class AuthorFixtureFactory extends AbstractExampleFactory
 {
     private OptionsResolver $optionsResolver;
 

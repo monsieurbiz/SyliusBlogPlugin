@@ -83,6 +83,7 @@ final class ArticleFixtureFactory extends AbstractExampleFactory
         }
         $article->setImage($options['image']);
         $article->setVideo($options['video']);
+        $article->setThumbnailImage($options['thumbnailImage']);
         $channels = $this->channelRepository->findAll();
         /** @var ChannelInterface $channel */
         foreach ($channels as $channel) {

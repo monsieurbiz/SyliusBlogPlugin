@@ -18,7 +18,7 @@ use MonsieurBiz\SyliusBlogPlugin\Fixture\Factory\AuthorFixtureFactory;
 use Sylius\Bundle\CoreBundle\Fixture\AbstractResourceFixture;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-final class AuthorFixture extends AbstractResourceFixture
+class AuthorFixture extends AbstractResourceFixture
 {
     public function __construct(
         EntityManagerInterface $blogAuthorManager,

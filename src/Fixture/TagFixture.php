@@ -18,7 +18,7 @@ use MonsieurBiz\SyliusBlogPlugin\Fixture\Factory\TagFixtureFactory;
 use Sylius\Bundle\CoreBundle\Fixture\AbstractResourceFixture;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-final class TagFixture extends AbstractResourceFixture
+class TagFixture extends AbstractResourceFixture
 {
     public function __construct(
         EntityManagerInterface $blogTagManager,
