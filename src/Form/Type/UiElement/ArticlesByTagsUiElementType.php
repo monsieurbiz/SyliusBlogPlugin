@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace MonsieurBiz\SyliusBlogPlugin\Form\Type\UiElement;
 
 use MonsieurBiz\SyliusBlogPlugin\Entity\ArticleInterface;
-use MonsieurBiz\SyliusBlogPlugin\Entity\Tag;
 use MonsieurBiz\SyliusBlogPlugin\Form\Type\ArticlesDisplayType;
 use MonsieurBiz\SyliusBlogPlugin\Repository\TagRepositoryInterface;
 use MonsieurBiz\SyliusRichEditorPlugin\Attribute\AsUiElement;
@@ -26,6 +25,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -49,6 +49,8 @@ class ArticlesByTagsUiElementType extends AbstractType
         private readonly TagRepositoryInterface $tagRepository,
         private readonly LocaleContextInterface $localeContext,
         private bool $enableCaseStudies,
+        #[Autowire('%monsieurbiz_blog.model.tag.class%')]
+        private string $tagClass,
     ) {
     }
 
@@ -68,7 +70,7 @@ class ArticlesByTagsUiElementType extends AbstractType
             ->add('tags', EntityType::class, [
                 'label' => 'monsieurbiz_blog.ui_element.articles_by_tags_ui_element.fields.tags',
                 'required' => false,
-                'class' => Tag::class,
+                'class' => $this->tagClass,
                 'choice_label' => fn (Tag $tag) => $tag->getName(),
                 'choice_value' => fn (?Tag $tag) => $tag?->getId(),
                 'query_builder' => function (TagRepositoryInterface $tagRepository) {

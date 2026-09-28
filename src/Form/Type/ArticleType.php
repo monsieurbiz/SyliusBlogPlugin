@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusBlogPlugin\Form\Type;
 
-use MonsieurBiz\SyliusBlogPlugin\Entity\Tag;
 use MonsieurBiz\SyliusBlogPlugin\Entity\TagInterface;
 use MonsieurBiz\SyliusBlogPlugin\Repository\AuthorRepositoryInterface;
 use MonsieurBiz\SyliusBlogPlugin\Repository\TagRepositoryInterface;
@@ -25,6 +24,7 @@ use Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,6 +36,8 @@ final class ArticleType extends AbstractResourceType
         private AuthorRepositoryInterface $authorRepository,
         string $dataClass,
         array $validationGroups = [],
+        #[Autowire('%monsieurbiz_blog.model.tag.class%')]
+        private string $tagClass,
     ) {
         parent::__construct($dataClass, $validationGroups);
     }
@@ -67,7 +69,7 @@ final class ArticleType extends AbstractResourceType
                 'label' => 'monsieurbiz_blog.form.article.tags',
                 'required' => true,
                 'multiple' => true,
-                'class' => Tag::class,
+                'class' => $this->tagClass,
                 'query_builder' => function (TagRepositoryInterface $tagRepository) {
                     return $tagRepository->createListQueryBuilder($this->localeContext->getLocaleCode());
                 },

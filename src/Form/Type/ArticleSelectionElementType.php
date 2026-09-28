@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusBlogPlugin\Form\Type;
 
-use MonsieurBiz\SyliusBlogPlugin\Entity\Article;
 use MonsieurBiz\SyliusBlogPlugin\Entity\ArticleInterface;
 use MonsieurBiz\SyliusBlogPlugin\Repository\ArticleRepositoryInterface;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -33,6 +33,8 @@ final class ArticleSelectionElementType extends AbstractType
         private readonly ChannelContextInterface $channelContext,
         private readonly LocaleContextInterface $localeContext,
         private bool $enableCaseStudies,
+        #[Autowire('%monsieurbiz_blog.model.article.class%')]
+        private string $articleClass,
     ) {
     }
 
@@ -43,7 +45,7 @@ final class ArticleSelectionElementType extends AbstractType
     {
         $builder
             ->add('article', EntityType::class, [
-                'class' => Article::class,
+                'class' => $this->articleClass,
                 'label' => 'monsieurbiz_blog.ui_element.articles_selection_ui_element.fields.article',
                 'choice_label' => fn (Article $article) => '[' . $article->getType() . '] ' . $article->getTitle(),
                 'choice_value' => fn (?Article $article) => $article?->getId(),
